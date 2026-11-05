@@ -152,6 +152,27 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/FileToo
 | `renombrar` | Renombrar en lote (`-WhatIf` para previsualizar) |
 | `comparar <A> <B>` | Comparar dos carpetas |
 
+### 🖥 PSRemoting — Administración remota
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/PSRemoting.ps1 | iex
+```
+
+| Comando | Qué hace |
+|---|---|
+| `maquinas` | Listar / agregar / quitar máquinas guardadas |
+| `ping-remoto <equipos>` | Comprobar estado (ping + WinRM) |
+| `remoto <equipos> { cmd }` | Ejecutar comando en varias máquinas en paralelo |
+| `ir <equipo>` | Sesión interactiva (como SSH) |
+| `disco-remoto <equipos>` | Espacio en disco en remoto |
+| `servicios-remoto <eq> svc1,svc2` | Estado de servicios en remoto |
+| `reiniciar-servicio <eq> svc` | Reiniciar servicio en remoto |
+| `info-remoto <equipos>` | Info del sistema: SO, CPU, RAM, uptime, IP |
+| `copiar-remoto -A <eq> ...` | Copiar archivos a/desde máquinas remotas |
+| `activar-winrm` | Activar WinRM local y configurar TrustedHosts |
+
+> Usa `todas` para lanzar a todas las guardadas. Usa `-Credencial` para pedir usuario/pass.
+
 ---
 
 ## Estructura
@@ -162,7 +183,8 @@ my-Heo-Terminal/
 ├── Profile.ps1              # Perfil: SSH, CyberLab, ASCII art, carga de temas
 ├── extras/
 │   ├── Install-AI.ps1       # Instalador de asistentes IA
-│   └── FileTools.ps1        # Funciones para archivos
+│   ├── FileTools.ps1        # Funciones para archivos
+│   └── PSRemoting.ps1       # Administración remota de máquinas
 ├── themes/
 │   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
 │   ├── Dev.ps1              # Herramientas de desarrollo
