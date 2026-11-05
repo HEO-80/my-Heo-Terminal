@@ -173,6 +173,23 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/PSRemot
 
 > Usa `todas` para lanzar a todas las guardadas. Usa `-Credencial` para pedir usuario/pass.
 
+### 📊 EventMonitor — Monitor de eventos
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/EventMonitor.ps1 | iex
+```
+
+| Comando | Qué hace |
+|---|---|
+| `vigilar [-Horas 24]` | Resumen completo: errores, logins fallidos, servicios caídos, reinicios |
+| `logins [-Solo Fallidos]` | Intentos de login con usuario, IP y método |
+| `errores [-Log System]` | Errores críticos de cualquier log |
+| `buscar-evento <ID>` | Buscar por Event ID o `-Texto` en el mensaje |
+| `exportar-eventos` | Exportar errores a CSV en el escritorio |
+| `ids` | Referencia rápida de Event IDs importantes |
+
+> Ejecutar como Admin para leer Security. Combinar con PSRemoting: `remoto Servidor01 { vigilar -Horas 4 }`
+
 ---
 
 ## Estructura
@@ -184,7 +201,8 @@ my-Heo-Terminal/
 ├── extras/
 │   ├── Install-AI.ps1       # Instalador de asistentes IA
 │   ├── FileTools.ps1        # Funciones para archivos
-│   └── PSRemoting.ps1       # Administración remota de máquinas
+│   ├── PSRemoting.ps1       # Administración remota de máquinas
+│   └── EventMonitor.ps1     # Monitor de eventos de Windows
 ├── themes/
 │   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
 │   ├── Dev.ps1              # Herramientas de desarrollo
