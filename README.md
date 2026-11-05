@@ -124,12 +124,45 @@ Sistema Leitner de repetición espaciada — lo que fallas vuelve antes, lo que 
 
 ---
 
+## Extras (add-ons opcionales)
+
+Scripts independientes que puedes instalar por separado.
+
+### 🤖 Install-AI — Instalador de asistentes IA
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install-AI.ps1 | iex
+```
+
+Menú interactivo para instalar Opencode (Gemini), Claude Code o GitHub Copilot CLI con configuración de API keys.
+
+### 📁 FileTools — Funciones para archivos
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/FileTools.ps1 | iex
+```
+
+| Comando | Qué hace |
+|---|---|
+| `info <ruta>` | Info completa de archivo o carpeta |
+| `hash <ruta>` | Hash SHA-256 (o MD5/SHA1/SHA512) |
+| `peso [ruta]` | Qué subcarpetas ocupan más |
+| `buscar <texto>` | Encontrar archivos por nombre |
+| `duplicados` | Encontrar duplicados por hash |
+| `renombrar` | Renombrar en lote (`-WhatIf` para previsualizar) |
+| `comparar <A> <B>` | Comparar dos carpetas |
+
+---
+
 ## Estructura
 
 ```
 my-Heo-Terminal/
 ├── install.ps1              # Instalador (irm|iex y local)
 ├── Profile.ps1              # Perfil: SSH, CyberLab, ASCII art, carga de temas
+├── extras/
+│   ├── Install-AI.ps1       # Instalador de asistentes IA
+│   └── FileTools.ps1        # Funciones para archivos
 ├── themes/
 │   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
 │   ├── Dev.ps1              # Herramientas de desarrollo
