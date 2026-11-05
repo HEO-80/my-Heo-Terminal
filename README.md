@@ -190,6 +190,20 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/EventMo
 
 > Ejecutar como Admin para leer Security. Combinar con PSRemoting: `remoto Servidor01 { vigilar -Horas 4 }`
 
+### 🖱 Install-DragDrop — Integración con Explorer
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install-DragDrop.ps1 | iex
+```
+
+Tres formas de analizar archivos al instante:
+
+1. **Arrastrar** — arrastra archivos encima de `CyberAnalizar.bat` en el Escritorio
+2. **Clic derecho** — "Analizar con CyberTools" en el menú de Explorer (necesita Admin)
+3. **Terminal** — `recibir archivo1.pdf archivo2.docx`
+
+> Usa las funciones de FileTools (info + hash). Desinstalar: `Uninstall-CyberToolsMenu` como Admin.
+
 ---
 
 ## Estructura
@@ -202,7 +216,8 @@ my-Heo-Terminal/
 │   ├── Install-AI.ps1       # Instalador de asistentes IA
 │   ├── FileTools.ps1        # Funciones para archivos
 │   ├── PSRemoting.ps1       # Administración remota de máquinas
-│   └── EventMonitor.ps1     # Monitor de eventos de Windows
+│   ├── EventMonitor.ps1     # Monitor de eventos de Windows
+│   └── Install-DragDrop.ps1 # Integración drag & drop + clic derecho con Explorer
 ├── themes/
 │   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
 │   ├── Dev.ps1              # Herramientas de desarrollo
