@@ -1,18 +1,50 @@
-# ⚡ my-Heo-Terminal
+<div align="center">
 
-Mi terminal personal con estética Cyberpunk 2077 — configuración privada, herramientas de desarrollo, atajos personales y sistema completo de entrenamiento de terminal.
+<pre>
+ ██╗  ██╗███████╗ ██████╗    ██████╗ ███████╗██╗   ██╗
+ ██║  ██║██╔════╝██╔═══██╗   ██╔══██╗██╔════╝██║   ██║
+ ███████║█████╗  ██║   ██║   ██║  ██║█████╗  ██║   ██║
+ ██╔══██║██╔══╝  ██║   ██║   ██║  ██║██╔══╝  ╚██╗ ██╔╝
+ ██║  ██║███████╗╚██████╔╝   ██████╔╝███████╗ ╚████╔╝
+ ╚═╝  ╚═╝╚══════╝ ╚═════╝    ╚═════╝ ╚══════╝  ╚═══╝
+</pre>
+
+**my-Heo-Terminal — Mi terminal personal Cyberpunk 2077**
+
+</div>
 
 > **Repo privado.** La versión pública (sin mis atajos ni los módulos de cursos) está en [powershell-cyberpunk](https://github.com/HEO-80/powershell-cyberpunk).
 
 ---
 
-## Quick Install (one command)
+## ⚡ Quick Install (one command)
 
 ```powershell
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | iex
 ```
 
 > Requiere acceso al repo (privado). Si da error, clona manualmente con `git clone` usando tu token.
+
+---
+
+## Screenshots
+
+### Dashboard con mis atajos, SSH y CyberLab
+
+<img src="img/dashboard.png" alt="Dashboard" width="100%"/>
+
+### Dashboard completo con Docker y repaso pendiente
+
+<img src="img/dashboard-full.png" alt="Full Dashboard" width="100%"/>
+
+### Terminal-Icons — iconos para archivos y carpetas
+
+<img src="img/terminal-icons.png" alt="Terminal Icons" width="100%"/>
+
+### help-ps — todos los comandos, atajos y herramientas
+
+<img src="img/help-ps-1.png" alt="Help 1" width="100%"/>
+<img src="img/help-ps-2.png" alt="Help 2" width="100%"/>
 
 ---
 
@@ -24,6 +56,7 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | 
 - Paleta ANSI true-color personalizable (`$global:CY`)
 
 ### 🔧 Mis atajos personales
+
 | Comando | Qué hace |
 |---|---|
 | `n` / `o` / `g` | Notion / Obsidian / Gmail |
@@ -35,6 +68,7 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | 
 | `chrome-dev` / `chrome-docencia` / `chrome-study` / `chrome-ocio` | Perfiles individuales |
 
 ### 🛠 Funciones ergonómicas
+
 | Comando | Qué hace |
 |---|---|
 | `top-size [n]` | Los N archivos más pesados de la carpeta |
@@ -45,6 +79,7 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | 
 | `Measure-Profile` | Medir cuánto tarda en arrancar el perfil |
 
 ### 💻 Herramientas de desarrollo (Dev.ps1)
+
 | Comando | Qué hace |
 |---|---|
 | `dev` | Estado de un vistazo: rama git, herramientas, BD Docker, puertos |
@@ -97,7 +132,7 @@ my-Heo-Terminal/
 ├── Profile.ps1              # Perfil: SSH, CyberLab, ASCII art, carga de temas
 ├── themes/
 │   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
-│   ├── Dev.ps1              # Herramientas de desarrollo (jr, git, Docker DBs, API...)
+│   ├── Dev.ps1              # Herramientas de desarrollo
 │   └── omp_cyberpunk.json   # Tema de Oh My Posh
 └── training/
     ├── Motor.ps1            # Motor Leitner de repetición espaciada
@@ -108,7 +143,7 @@ my-Heo-Terminal/
     ├── Forja.ps1            # Scripts PowerShell con tests
     ├── Santuario.ps1        # Scripts bash (WSL)
     ├── Reto.ps1             # Archivos y permisos
-    ├── PwShell.ps1          # PowerShell básico (retos interactivos)
+    ├── PwShell.ps1          # PowerShell básico
     ├── PwShell2.ps1         # Scripting avanzado
     ├── Comandos.ps1         # CMD y .bat
     ├── Terraform.ps1        # Terraform
@@ -127,4 +162,8 @@ my-Heo-Terminal/
 
 ---
 
+<div align="center">
+
 Made by [HEO-80](https://github.com/HEO-80)
+
+</div>
