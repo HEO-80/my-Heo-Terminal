@@ -1,0 +1,130 @@
+# ⚡ my-Heo-Terminal
+
+Mi terminal personal con estética Cyberpunk 2077 — configuración privada, herramientas de desarrollo, atajos personales y sistema completo de entrenamiento de terminal.
+
+> **Repo privado.** La versión pública (sin mis atajos ni los módulos de cursos) está en [powershell-cyberpunk](https://github.com/HEO-80/powershell-cyberpunk).
+
+---
+
+## Quick Install (one command)
+
+```powershell
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | iex
+```
+
+> Requiere acceso al repo (privado). Si da error, clona manualmente con `git clone` usando tu token.
+
+---
+
+## Qué incluye
+
+### 🎨 Tema Cyberpunk 2077
+- Prompt NETWATCH con rama git, ruta y tiempo de ejecución (Oh My Posh)
+- Dashboard al arrancar: sistema, atajos, Docker, repaso pendiente
+- Paleta ANSI true-color personalizable (`$global:CY`)
+
+### 🔧 Mis atajos personales
+| Comando | Qué hace |
+|---|---|
+| `n` / `o` / `g` | Notion / Obsidian / Gmail |
+| `vsc` / `proj` | VS Code (carpeta actual / mis repos) |
+| `bee` / `lab` / `kali` / `kalir` | SSH: Beelink / CyberLab / Kali LAN / Kali Tailscale |
+| `proxmox` / `proxlocal` | Abrir Proxmox (Tailscale / LAN) |
+| `workspaces` | Abrir todos los perfiles de Chrome |
+| `setup` | Mi setup completo: Chrome + Kali + Proxmox |
+| `chrome-dev` / `chrome-docencia` / `chrome-study` / `chrome-ocio` | Perfiles individuales |
+
+### 🛠 Funciones ergonómicas
+| Comando | Qué hace |
+|---|---|
+| `top-size [n]` | Los N archivos más pesados de la carpeta |
+| `top-cpu [n]` | Los N procesos con más CPU |
+| `matar <nombre\|pid>` | Cerrar procesos por nombre o PID (con confirmación) |
+| `puertos` | Puertos en escucha con nombre del proceso |
+| `clean-logs [-WhatIf]` | Borrar .log y .tmp recursivamente |
+| `Measure-Profile` | Medir cuánto tarda en arrancar el perfil |
+
+### 💻 Herramientas de desarrollo (Dev.ps1)
+| Comando | Qué hace |
+|---|---|
+| `dev` | Estado de un vistazo: rama git, herramientas, BD Docker, puertos |
+| `entorno` | Versiones de Java, .NET, Node, Python, Docker... |
+| `jr <Clase>` | Compilar y ejecutar Java (javac + java) |
+| `javas` / `usa-java 17` | Ver JDKs instalados / cambiar de JDK |
+| `gst` / `glog` / `gdif` / `gac` / `gsync` | Git rápido con protección de secretos |
+| `procesos` / `hijos` / `arbol` | Procesos, hijos de un PID, árbol |
+| `lanzar prog args` | ProcessBuilder de PowerShell (PID, stdout, stderr, tiempo) |
+| `mide { } [-Veces n]` | Medir cuánto tarda un bloque |
+| `proceso-vs-hilo` | Demostrar Start-Job (proceso) vs Start-ThreadJob (hilo) |
+| `db-up mysql` | BD en Docker: mysql, postgres, mongo, sqlserver, redis |
+| `api <url>` | Llamada HTTP con estado, tiempo y JSON formateado |
+| `servidor` | Servidor web estático para HTML/CSS/JS |
+| `nuevo java\|web\|node\|dotnet <nombre>` | Proyecto nuevo con git init |
+| `secretos` | Buscar contraseñas y claves en el código |
+| `cargar-env` | Cargar variables de un .env |
+| `limpia [-WhatIf]` | Borrar node_modules, target, bin/obj, __pycache__... |
+| `grepr <texto>` | Buscar texto en código (sin node_modules ni .git) |
+
+### 🥋 Sistema de entrenamiento completo
+
+Sistema Leitner de repetición espaciada — lo que fallas vuelve antes, lo que dominas aparece menos.
+
+| Módulo | Comando | Qué practicas |
+|---|---|---|
+| **Dojo 1** | `dojo` | Nombres de comandos: Linux vs PowerShell vs CMD |
+| **Dojo 2** | `dojo2` | Comandos completos con argumentos |
+| **Rosetta** | `rosetta` | Tabla de equivalencias Linux / PowerShell / CMD |
+| **Tatami 1** | `tatami` | Misiones prácticas en sandbox (básico) |
+| **Tatami 2** | `tatami2` | Misiones intermedias: texto, CSV, renombrar |
+| **Forja** | `forja` | Escribir scripts PowerShell con tests |
+| **Santuario** | `santuario` | Escribir scripts bash (WSL) |
+| **Reto** | `reto` | Archivos, carpetas y permisos (icacls, attrib) |
+| **PwShell2** | `pwshell2` | Scripting avanzado: variables, funciones, JSON, servicios |
+| **Comandos** | `comandos` | CMD y scripts .bat |
+| **Terraform** | `terraform-dojo` | init, plan, apply, state, modules, import |
+| **AWS CLI** | `awscli` | S3, EC2, IAM, VPC, Lambda, CloudWatch |
+| **Azure CLI** | `azcli` | VMs, App Service, AKS, Storage, IAM, Monitor |
+| **Ansible** | `ansible-dojo` | ad-hoc, playbooks, roles, vault, galaxy |
+| **Progreso** | `progreso` | Stats: dominados, pendientes, más fallados |
+
+---
+
+## Estructura
+
+```
+my-Heo-Terminal/
+├── install.ps1              # Instalador (irm|iex y local)
+├── Profile.ps1              # Perfil: SSH, CyberLab, ASCII art, carga de temas
+├── themes/
+│   ├── Cyberpunk2077.ps1    # Tema: dashboard, funciones, training loader
+│   ├── Dev.ps1              # Herramientas de desarrollo (jr, git, Docker DBs, API...)
+│   └── omp_cyberpunk.json   # Tema de Oh My Posh
+└── training/
+    ├── Motor.ps1            # Motor Leitner de repetición espaciada
+    ├── Dojo.ps1             # Rosetta nivel 1
+    ├── Dojo2.ps1            # Comandos completos nivel 2
+    ├── Tatami1.ps1          # Misiones sandbox básicas
+    ├── Tatami2.ps1          # Misiones sandbox intermedias
+    ├── Forja.ps1            # Scripts PowerShell con tests
+    ├── Santuario.ps1        # Scripts bash (WSL)
+    ├── Reto.ps1             # Archivos y permisos
+    ├── PwShell.ps1          # PowerShell básico (retos interactivos)
+    ├── PwShell2.ps1         # Scripting avanzado
+    ├── Comandos.ps1         # CMD y .bat
+    ├── Terraform.ps1        # Terraform
+    ├── AwsCli.ps1           # AWS CLI
+    ├── AzureCli.ps1         # Azure CLI
+    └── Ansible.ps1          # Ansible
+```
+
+## Requisitos
+
+- **PowerShell 5.1+** o **PowerShell 7+**
+- **Windows Terminal** (recomendado)
+- **Git**
+- **WSL** (solo para Santuario)
+- **Docker** (solo para Dev.ps1 — bases de datos)
+
+---
+
+Made by [HEO-80](https://github.com/HEO-80)
