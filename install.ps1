@@ -224,11 +224,11 @@ if ($_needsHook) {
 Write-Step "Configuring Windows Terminal..."
 
 # Descargar imagen de fondo al repo
-$_bgImage = Join-Path $_root "img\bg-cyberpunk.jpg"
+$_bgImage = Join-Path $_root "img\bg-cyberpunk.gif"
 if (-not (Test-Path $_bgImage)) {
     Write-Step "Descargando fondo cyberpunk..."
     try {
-        $_bgUrl = "https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/img/bg-cyberpunk.jpg"
+        $_bgUrl = "https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/img/bg-cyberpunk.gif"
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         (New-Object System.Net.WebClient).DownloadFile($_bgUrl, $_bgImage)
     } catch {
