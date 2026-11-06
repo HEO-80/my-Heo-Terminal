@@ -17,13 +17,28 @@
 
 ---
 
-## ⚡ Quick Install (one command)
+## ⚡ Quick Install
+
+Abre PowerShell y ejecuta en orden:
 
 ```powershell
+# 1. Instalar Git (saltar si ya lo tienes)
+winget install Git.Git -s winget --accept-package-agreements --accept-source-agreements
+
+# 2. Instalar la terminal (tema + training + herramientas)
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | iex
+
+# 3. Reiniciar PowerShell, luego instalar extras (opcional)
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/FileTools.ps1 | iex
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/PSRemoting.ps1 | iex
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/EventMonitor.ps1 | iex
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install-AI.ps1 | iex
+irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install-DragDrop.ps1 | iex
 ```
 
-> Requiere acceso al repo (privado). Si da error, clona manualmente con `git clone` usando tu token.
+> Requiere acceso al repo (privado). Si da error en el paso 2, clona manualmente con `git clone` usando tu token.
+>
+> Si winget no funciona (ej. usuario Admin sin Microsoft Store), instala Git desde [git-scm.com](https://git-scm.com/download/win) y salta el paso 1.
 
 ---
 
