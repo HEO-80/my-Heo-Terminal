@@ -10,7 +10,7 @@
 #    .\my-Heo-Terminal\install.ps1                                  #
 # ================================================================= #
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $esc = [char]27
 
 function Write-Step  { param($t) Write-Host "${esc}[38;2;252;238;10m  > $t${esc}[0m" }
@@ -33,7 +33,7 @@ if (-not $_root -or -not (Test-Path (Join-Path $_root "themes"))) {
 
     if (Test-Path $_installDir) {
         Write-Step "Updating existing installation..."
-        git -C $_installDir pull --ff-only 2>$null
+        $null = git -C $_installDir pull --ff-only 2>&1
         if ($LASTEXITCODE -ne 0) {
             Write-Warn "Could not update. Removing and re-cloning..."
             Remove-Item $_installDir -Recurse -Force
@@ -41,15 +41,53 @@ if (-not $_root -or -not (Test-Path (Join-Path $_root "themes"))) {
     }
 
     if (-not (Test-Path $_installDir)) {
-        Write-Step "Cloning my-Heo-Terminal..."
-        if (Get-Command git -ErrorAction SilentlyContinue) {
-            git clone --depth 1 https://github.com/HEO-80/my-Heo-Terminal.git $_installDir
-            if ($LASTEXITCODE -ne 0) {
-                Write-Fail "git clone failed. Is the repo accessible? Check your SSH keys / token."
+        # Install Git automatically if missing
+        if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+            Write-Warn "Git no esta instalado. Instalando..."
+
+            # Intento 1: winget
+            $_gitInstalled = $false
+            if (Get-Command winget -ErrorAction SilentlyContinue) {
+                Write-Step "Intentando con winget..."
+                winget install Git.Git -s winget --accept-package-agreements --accept-source-agreements 2>$null
+                $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "User") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "Machine")
+                if (Get-Command git -ErrorAction SilentlyContinue) { $_gitInstalled = $true }
+            }
+
+            # Intento 2: descarga directa e instalacion silenciosa
+            if (-not $_gitInstalled) {
+                Write-Step "Descargando Git directamente..."
+                $_gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/Git-2.47.1-64-bit.exe"
+                $_gitExe = Join-Path $env:TEMP "git-installer.exe"
+                try {
+                    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                    (New-Object System.Net.WebClient).DownloadFile($_gitUrl, $_gitExe)
+                    Write-Step "Instalando Git (silencioso)..."
+                    Start-Process $_gitExe -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS=`"icons,ext\reg\shellhere,assoc,assoc_sh`"" -Wait
+                    Remove-Item $_gitExe -ErrorAction SilentlyContinue
+                    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "User") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "Machine")
+                    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+                        $gitPath = "C:\Program Files\Git\cmd"
+                        if (Test-Path $gitPath) { $env:PATH += ";$gitPath" }
+                    }
+                    if (Get-Command git -ErrorAction SilentlyContinue) { $_gitInstalled = $true }
+                } catch {
+                    Write-Warn "No se pudo descargar: $($_.Exception.Message)"
+                }
+            }
+
+            if (-not $_gitInstalled) {
+                Write-Fail "No se pudo instalar Git."
+                Write-Fail "Instala manualmente: https://git-scm.com/download/win"
                 return
             }
-        } else {
-            Write-Fail "Git is required. Install it: winget install Git.Git"
+            Write-OK "Git instalado: $(git --version)"
+        }
+
+        Write-Step "Cloning my-Heo-Terminal..."
+        git clone --depth 1 https://github.com/HEO-80/my-Heo-Terminal.git $_installDir
+        if ($LASTEXITCODE -ne 0) {
+            Write-Fail "git clone failed. Is the repo accessible? Check your SSH keys / token."
             return
         }
     }
@@ -75,12 +113,42 @@ if (-not $_fontInstalled) {
     $_fontInstalled = Get-ChildItem "C:\Windows\Fonts\*CaskaydiaCove*" -ErrorAction SilentlyContinue
 }
 if (-not $_fontInstalled) {
-    Write-Warn "Installing CaskaydiaCove Nerd Font..."
-    try { oh-my-posh font install CascadiaCode 2>$null; Write-OK "Nerd Font installed" }
-    catch { Write-Warn "Could not auto-install font. Download from: https://www.nerdfonts.com/font-downloads" }
+    $_fontOK = $false
+    if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+        Write-Warn "Installing CaskaydiaCove Nerd Font via oh-my-posh..."
+        try { oh-my-posh font install CascadiaCode 2>$null; $_fontOK = $true } catch {}
+    }
+    if (-not $_fontOK) {
+        Write-Step "Descargando fuente directamente..."
+        try {
+            $_fontZip = Join-Path $env:TEMP "CascadiaCode-NF.zip"
+            $_fontDir = Join-Path $env:TEMP "CascadiaCode-NF"
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            (New-Object System.Net.WebClient).DownloadFile("https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip", $_fontZip)
+            Expand-Archive $_fontZip -DestinationPath $_fontDir -Force
+            $fontsFolder = "$env:LOCALAPPDATA\Microsoft\Windows\Fonts"
+            if (-not (Test-Path $fontsFolder)) { New-Item -ItemType Directory -Path $fontsFolder -Force | Out-Null }
+            Get-ChildItem $_fontDir -Filter "*.ttf" | ForEach-Object { Copy-Item $_.FullName $fontsFolder -Force }
+            # Si somos admin, instalar a nivel de sistema tambien
+            $esAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+            if ($esAdmin) {
+                Get-ChildItem $_fontDir -Filter "*.ttf" | ForEach-Object { Copy-Item $_.FullName "C:\Windows\Fonts\" -Force }
+            }
+            Remove-Item $_fontZip, $_fontDir -Recurse -Force -ErrorAction SilentlyContinue
+            $_fontOK = $true
+        } catch { Write-Warn "No se pudo instalar la fuente: $($_.Exception.Message)" }
+    }
+    if ($_fontOK) { Write-OK "CaskaydiaCove Nerd Font installed" }
+    else { Write-Warn "Descarga la fuente: https://www.nerdfonts.com/font-downloads" }
 } else { Write-OK "Nerd Font OK" }
 
 # ── 3. PowerShell modules ────────────────────────────────────────
+# Instalar NuGet silenciosamente
+if (-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue | Where-Object { $_.Version -ge "2.8.5.201" })) {
+    Write-Step "Installing NuGet provider..."
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction SilentlyContinue | Out-Null
+}
+
 foreach ($_mod in @("Terminal-Icons", "PSFzf")) {
     Write-Step "Checking module: $_mod..."
     if (-not (Get-Module -ListAvailable -Name $_mod -ErrorAction SilentlyContinue)) {
@@ -90,49 +158,137 @@ foreach ($_mod in @("Terminal-Icons", "PSFzf")) {
 }
 
 # ── 4. CLI tools ─────────────────────────────────────────────────
-foreach ($_tool in @(
-    @{ Name = "fzf";    Cmd = "fzf";    Pkg = "junegunn.fzf" },
-    @{ Name = "zoxide"; Cmd = "zoxide"; Pkg = "ajeetdsouza.zoxide" }
-)) {
-    Write-Step "Checking $_($_.Name)..."
-    if (-not (Get-Command $_tool.Cmd -ErrorAction SilentlyContinue)) {
-        winget install $_tool.Pkg -s winget --accept-package-agreements --accept-source-agreements 2>$null
-        Write-OK "$($_tool.Name) installed"
-    } else { Write-OK "$($_tool.Name) OK" }
-}
+Write-Step "Checking fzf..."
+if (-not (Get-Command fzf -ErrorAction SilentlyContinue)) {
+    Write-Warn "Installing fzf..."
+    winget install junegunn.fzf -s winget --accept-package-agreements --accept-source-agreements 2>$null
+    Write-OK "fzf installed"
+} else { Write-OK "fzf OK" }
+
+Write-Step "Checking zoxide..."
+if (-not (Get-Command zoxide -ErrorAction SilentlyContinue)) {
+    Write-Warn "Installing zoxide..."
+    winget install ajeetdsouza.zoxide -s winget --accept-package-agreements --accept-source-agreements 2>$null
+    Write-OK "zoxide installed"
+} else { Write-OK "zoxide OK" }
 
 # ── 5. Hook into $PROFILE ────────────────────────────────────────
 Write-Step "Setting up PowerShell profile..."
 $_profileLine = ". `"$_root\Profile.ps1`""
+$_profilePath = $PROFILE
 
-if (-not (Test-Path $PROFILE)) {
-    New-Item -ItemType File -Path $PROFILE -Force | Out-Null
-    Write-Warn "Created new profile at: $PROFILE"
+$_profileDir = Split-Path $_profilePath
+if (-not (Test-Path $_profileDir)) {
+    New-Item -ItemType Directory -Path $_profileDir -Force | Out-Null
 }
 
-$_profileContent = Get-Content $PROFILE -Raw -ErrorAction SilentlyContinue
-if ($_profileContent -notmatch [regex]::Escape("my-Heo-Terminal")) {
-    # Remove old powershell-cyberpunk hook if present
-    if ($_profileContent -match "powershell-cyberpunk") {
-        $lines = Get-Content $PROFILE
+if (-not (Test-Path $_profilePath)) {
+    New-Item -ItemType File -Path $_profilePath -Force | Out-Null
+    Write-Warn "Created new profile at: $_profilePath"
+}
+
+$_profileContent = Get-Content $_profilePath -Raw -ErrorAction SilentlyContinue
+$_needsHook = $true
+if ($_profileContent -and $_profileContent.Contains("my-Heo-Terminal")) {
+    $_needsHook = $false
+}
+
+if ($_needsHook) {
+    # Quitar hook viejo de powershell-cyberpunk si existe
+    if ($_profileContent -and $_profileContent.Contains("powershell-cyberpunk")) {
+        $lines = Get-Content $_profilePath
         $lines = $lines | Where-Object { $_ -notmatch "powershell-cyberpunk" }
-        $lines | Set-Content $PROFILE
-        Write-Warn "Removed old powershell-cyberpunk hook (replaced by my-Heo-Terminal)"
+        $lines | Set-Content $_profilePath
+        Write-Warn "Removed old powershell-cyberpunk hook"
     }
-    Add-Content -Path $PROFILE -Value "`n# my-Heo-Terminal`n$_profileLine"
-    Write-OK "Profile hooked: $PROFILE"
+
+    if (-not $_profileContent -or $_profileContent.Trim().Length -eq 0) {
+        Set-Content -Path $_profilePath -Value "# my-Heo-Terminal`n$_profileLine" -Encoding UTF8
+    } else {
+        Add-Content -Path $_profilePath -Value "`n# my-Heo-Terminal`n$_profileLine"
+    }
+
+    $_check = Get-Content $_profilePath -Raw -ErrorAction SilentlyContinue
+    if ($_check -and $_check.Contains("my-Heo-Terminal")) {
+        Write-OK "Profile hooked: $_profilePath"
+    } else {
+        Write-Fail "No se pudo escribir en el perfil: $_profilePath"
+        Write-Warn "Anade esta linea manualmente:"
+        Write-Host "  $_profileLine" -ForegroundColor Cyan
+    }
 } else {
     Write-OK "Profile already configured"
 }
 
-# ── Done ─────────────────────────────────────────────────────────
+# ── 6. Configure Windows Terminal (font + background) ────────────
+Write-Step "Configuring Windows Terminal..."
+
+# Descargar imagen de fondo al repo
+$_bgImage = Join-Path $_root "img\bg-cyberpunk.jpg"
+if (-not (Test-Path $_bgImage)) {
+    Write-Step "Descargando fondo cyberpunk..."
+    try {
+        $_bgUrl = "https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/img/bg-cyberpunk.jpg"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        (New-Object System.Net.WebClient).DownloadFile($_bgUrl, $_bgImage)
+    } catch {
+        # Si no existe en el repo, no pasa nada
+        $_bgImage = $null
+    }
+}
+
+foreach ($_wtPath in @(
+    "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json",
+    "$env:LOCALAPPDATA\Microsoft\Windows Terminal\settings.json"
+)) {
+    if (Test-Path $_wtPath) {
+        try {
+            $_wtJson = Get-Content $_wtPath -Raw | ConvertFrom-Json
+
+            # Crear defaults si no existe
+            if (-not $_wtJson.profiles.defaults) {
+                $_wtJson.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
+            }
+
+            # Fuente
+            if (-not $_wtJson.profiles.defaults.font) {
+                $_wtJson.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{} -Force
+            }
+            $_wtJson.profiles.defaults.font | Add-Member -NotePropertyName "face" -NotePropertyValue "CaskaydiaCove Nerd Font" -Force
+            Write-OK "Font set to CaskaydiaCove Nerd Font"
+
+            # Fondo con opacidad
+            if ($_bgImage -and (Test-Path $_bgImage)) {
+                $_wtJson.profiles.defaults | Add-Member -NotePropertyName "backgroundImage" -NotePropertyValue $_bgImage -Force
+                $_wtJson.profiles.defaults | Add-Member -NotePropertyName "backgroundImageOpacity" -NotePropertyValue 0.15 -Force
+                $_wtJson.profiles.defaults | Add-Member -NotePropertyName "backgroundImageStretchMode" -NotePropertyValue "uniformToFill" -Force
+                Write-OK "Background image set (15% opacity)"
+            }
+
+            # Opacidad de la terminal (efecto acrilico)
+            $_wtJson.profiles.defaults | Add-Member -NotePropertyName "opacity" -NotePropertyValue 85 -Force
+            $_wtJson.profiles.defaults | Add-Member -NotePropertyName "useAcrylic" -NotePropertyValue $true -Force
+            Write-OK "Acrylic transparency set (85%)"
+
+            $_wtJson | ConvertTo-Json -Depth 20 | Set-Content $_wtPath -Encoding UTF8
+        } catch {
+            Write-Warn "No se pudo configurar Windows Terminal: $($_.Exception.Message)"
+        }
+        break
+    }
+}
+
+# ── 7. Load profile ─────────────────────────────────────────────
 Write-Host ""
 Write-Host "${esc}[38;2;57;255;20m  ========================================${esc}[0m"
 Write-Host "${esc}[38;2;57;255;20m   Installation complete!                 ${esc}[0m"
 Write-Host "${esc}[38;2;57;255;20m  ========================================${esc}[0m"
 Write-Host ""
-Write-Host "  Restart PowerShell or run: ${esc}[38;2;252;238;10m. `$PROFILE${esc}[0m"
-Write-Host ""
-Write-Host "  ${esc}[38;2;136;136;136mSet your terminal font to 'CaskaydiaCove Nerd Font'${esc}[0m"
-Write-Host "  ${esc}[38;2;136;136;136mWindows Terminal: Settings > Profiles > Defaults > Font Face${esc}[0m"
+Write-Step "Cargando tu terminal..."
+try {
+    . $PROFILE
+} catch {
+    Write-Warn "No se pudo cargar el perfil automaticamente."
+    Write-Host "  Cierra y abre PowerShell para verlo."
+}
 Write-Host ""
