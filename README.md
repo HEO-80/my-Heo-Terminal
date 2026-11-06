@@ -19,16 +19,20 @@
 
 ## ⚡ Quick Install
 
-Abre PowerShell y ejecuta en orden:
+Abre PowerShell y pega esto — instala todo (Git, Oh My Posh, Nerd Font, Terminal-Icons, fzf, zoxide):
 
 ```powershell
-# 1. Instalar Git (saltar si ya lo tienes)
-winget install Git.Git -s winget --accept-package-agreements --accept-source-agreements
-
-# 2. Instalar la terminal (tema + training + herramientas)
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/install.ps1 | iex
+```
 
-# 3. Reiniciar PowerShell, luego instalar extras (opcional)
+> Si la caché de GitHub sirve una versión vieja, usa la API directa (sin caché):
+> ```powershell
+> $s=(irm "https://api.github.com/repos/HEO-80/my-Heo-Terminal/contents/install.ps1" -Headers @{Accept="application/vnd.github.v3.raw"});iex $s
+> ```
+
+Después de reiniciar PowerShell, instala los extras que quieras (opcional):
+
+```powershell
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/FileTools.ps1 | iex
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/PSRemoting.ps1 | iex
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/EventMonitor.ps1 | iex
@@ -36,9 +40,9 @@ irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install
 irm https://raw.githubusercontent.com/HEO-80/my-Heo-Terminal/main/extras/Install-DragDrop.ps1 | iex
 ```
 
-> Requiere acceso al repo (privado). Si da error en el paso 2, clona manualmente con `git clone` usando tu token.
+> **Después de instalar**, pon la fuente **CaskaydiaCove Nerd Font** en Windows Terminal: `Settings > Profiles > Defaults > Font Face`.
 >
-> Si winget no funciona (ej. usuario Admin sin Microsoft Store), instala Git desde [git-scm.com](https://git-scm.com/download/win) y salta el paso 1.
+> Requiere acceso al repo (privado). Si da error, clona manualmente con `git clone` usando tu token.
 
 ---
 
