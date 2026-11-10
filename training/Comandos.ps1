@@ -1,4 +1,4 @@
-# ═══════════════════════════════════════════════════════════════════════
+﻿# ═══════════════════════════════════════════════════════════════════════
 # COMANDOS · Practica CMD y scripts .bat
 # Sistema de retos interactivos con repaso espaciado (Leitner)
 # Compatible con PowerShell 5.1+

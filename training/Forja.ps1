@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #          FORJA: APRENDE A ESCRIBIR SCRIPTS (PowerShell)            #
 # ================================================================= #
 # IMPORTANTE: guardar como UTF-8 con BOM (o usar PowerShell 7).
@@ -321,7 +321,7 @@ function Invoke-ForjaMision {
 
         if ($bien -eq $total -and -not $res.Aviso) {
             Write-Host ""
-            Write-Cyber "✔ ¡MISIÓN SUPERADA!  ($bien/$total casos)" $c.Green
+            Write-Cyber "✔ ¡MISIÓN SUPERADA!  $($bien)/$($total) casos" $c.Green
             Write-Cyber "ℹ️  $($Mision.Concepto)" $c.Dim
             Write-Host ""
             Write-Cyber "Solución de referencia (compárala con la tuya; hay más formas válidas):" $c.Dim

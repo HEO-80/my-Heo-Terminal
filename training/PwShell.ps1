@@ -1,4 +1,4 @@
-# ═══════════════════════════════════════════════════════════════════════
+﻿# ═══════════════════════════════════════════════════════════════════════
 # PWSHELL · Practica scripting en PowerShell
 # Sistema de retos interactivos con repaso espaciado (Leitner)
 # Compatible con PowerShell 5.1+

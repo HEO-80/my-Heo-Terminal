@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #          FileTools.ps1 — Funciones para trabajar con archivos     #
 #          github.com/HEO-80/powershell-cyberpunk                   #
 #                                                                   #

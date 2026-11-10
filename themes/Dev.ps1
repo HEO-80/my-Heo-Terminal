@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #        DEV: HERRAMIENTAS PARA DESARROLLAR (DAM / DAW)              #
 # ================================================================= #
 # IMPORTANTE: guardar como UTF-8 con BOM (o usar PowerShell 7).
@@ -788,7 +788,7 @@ function secretos {
     }
 
     if (-not $Silencioso) {
-        if ($hallazgos.Count -eq 0) { Write-Cyber "✔ No he visto secretos en texto plano ($($archivos.Count) archivos revisados)." $c.Green }
+        if ($hallazgos.Count -eq 0) { Write-Cyber "✔ No he visto secretos en texto plano $($archivos.Count) archivos revisados." $c.Green }
         else {
             Write-Cyber "⚠ $($hallazgos.Count) posible(s) secreto(s):" $c.Magenta
             foreach ($h in $hallazgos) {

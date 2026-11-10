@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #      RETO: PRACTICA TAREAS REALES (archivos, carpetas, permisos)   #
 # ================================================================= #
 # IMPORTANTE: guardar como UTF-8 con BOM (o usar PowerShell 7).
@@ -275,7 +275,7 @@ function Complete-Reto {
     $res = if ($a.UsoSolucion) { 'fail' } elseif ($a.UsoPista -or $a.Fallos -gt 6) { 'pista' } else { 'ok' }
 
     Write-Host ""
-    Write-Cyber "✔ ¡RETO SUPERADO!   ($(@($r.Pasos).Count) pasos)" $c.Green
+    Write-Cyber "✔ ¡RETO SUPERADO!   $(@($r.Pasos).Count) pasos" $c.Green
     if ($r.Concepto) { Write-Cyber "ℹ️  $($r.Concepto)" $c.Dim }
 
     $e = Register-CyberResultado -Id "reto:$($r.Id)" -Resultado $res -Etiqueta $r.Titulo

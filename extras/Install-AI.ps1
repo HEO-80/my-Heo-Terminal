@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #       Install-AI.ps1 — Instalador de asistentes IA para terminal  #
 #       github.com/HEO-80/powershell-cyberpunk                      #
 #                                                                    #

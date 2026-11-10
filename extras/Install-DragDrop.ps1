@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #   Install-DragDrop.ps1 — Integrar FileTools con Explorer          #
 #   github.com/HEO-80/powershell-cyberpunk                          #
 #                                                                    #

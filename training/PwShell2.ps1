@@ -1,4 +1,4 @@
-# ═══════════════════════════════════════════════════════════════════════
+﻿# ═══════════════════════════════════════════════════════════════════════
 # PWSHELL2 · Practica scripting avanzado en PowerShell
 # Variables, funciones, bucles, JSON, usuarios, servicios...
 # Sistema de retos interactivos con repaso espaciado (Leitner)

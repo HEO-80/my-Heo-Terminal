@@ -1,4 +1,4 @@
-# ================================================================= #
+﻿# ================================================================= #
 #     PSRemoting.ps1 — Administracion remota simplificada           #
 #     github.com/HEO-80/powershell-cyberpunk                        #
 #                                                                    #
